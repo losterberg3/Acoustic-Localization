@@ -4,6 +4,7 @@ float duration, distance;
 int counter = 0;
 float sum = 0.0;
 
+// I am Lars
 void setup() {
   // put your setup code here, to run once:
   pinMode(trigPin, OUTPUT);  // trigPin is our output
