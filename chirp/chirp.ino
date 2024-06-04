@@ -5,8 +5,8 @@
 #include <tables/sin2048_int8.h>
 
 // Define chirp signal parameters
-float startFreq = 50; // Start frequency in Hz (20 kHz)
-const float endFreq = 300;   // End frequency in Hz (40 kHz)
+float startFreq = 1000; // Start frequency in Hz (20 kHz)
+const float endFreq = 1500;   // End frequency in Hz (40 kHz)
 const unsigned long duration = 1000; // Duration of the chirp in milliseconds
 const int amplitude = 127;     // Amplitude of the chirp signal. Did not really matter for piezoelectric
 
