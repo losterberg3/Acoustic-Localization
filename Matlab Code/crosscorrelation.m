@@ -9,11 +9,12 @@ p=q-127; %using the DC offset to bring the samples around 0 and then to normaliz
 p=p./127; %originally the DC offset was 507, but we had to convert to an 8 bit number to maximize the serial baud rate
 
 cl=0.5; %chirplength in seconds
-sf=500; %start frequency of the chirp
+sf=100; %start frequency of the chirp
 ef=1000; %end frequency of the chirp
-t=0:cl/8926:cl; %time for the chirp
+t=0:1/8926:1; %time for the chirp
 f=(t.^2*(ef-sf)/cl/2)+(t.*sf); %frequency linearly increasing (frequency is the derivative of this wrt t)
 ref=sin(f.*2*pi); %reference chirp signal
+ref((cl*8926):8927)=0; %setting the rest of the reference signal to 0
 
 X=fft(ref); %fft of the reference signal
 Y=fft(p); %fft of the sampled signal
