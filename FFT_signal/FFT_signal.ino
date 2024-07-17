@@ -17,7 +17,7 @@ const int window = 2048; // 2^11
 void setup() {
   // put your setup code here, to run once:
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   sampling_period_us = round(1000000 * (1.0 / SAMPLING_FREQUENCY));
 
   // Get Reference Signal from external header file.
