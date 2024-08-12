@@ -14,10 +14,11 @@
                 "-L/usr/local/lib",
                 "-lfftw3"
             ],
-            "group": "build",
-            "problemMatcher": [
-                "$gcc"
-            ]
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
         }
     ]
 }

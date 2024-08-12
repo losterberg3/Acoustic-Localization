@@ -2,8 +2,6 @@
 #include <iostream>
 #include <cmath>
 
-
-
 int main() {
 
 int shift=300; // how much signals are shifted by
@@ -59,6 +57,7 @@ for (int i=0;i<N;++i){
     int max=0;
     int index=0;
     double tof=0;
+    double distance=0;
 
     // Perform IFFT
     fftw_execute(plan_backward);
@@ -71,11 +70,12 @@ for (int i=0;i<N;++i){
     }
 
     tof=static_cast<double>(index)/(N-1);
-    tof=tof*343;
+    distance=tof*343;
 
     // Print the results
 
-    std::cout << "The time-of-flight is: " << tof << std::endl;
+    std::cout << "The time-of-flight is: " << tof << " seconds." << std::endl;
+    std::cout << "The distance is: " << distance << " meters." << std::endl;
 
     //for (int i = 0; i < N; ++i) {
         //std::cout << "Frequency bin " << i << ": "
