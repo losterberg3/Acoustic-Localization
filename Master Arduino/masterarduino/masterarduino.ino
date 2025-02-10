@@ -1,6 +1,6 @@
 void setup() {
   // put your setup code here, to run once:
-Serial.begin(2000000); //check baud rate
+Serial.begin(9600); //check baud rate
 ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
 //ADCSRA |= bit (ADPS0) | bit (ADPS1);                 //   8, 153846 hz theoretically
 ADCSRA |= bit (ADPS2);                               //  16, 76923 hz theoretically
@@ -12,9 +12,8 @@ ADCSRA |= bit (ADPS2);                               //  16, 76923 hz theoretica
 void loop() {
   // put your main code here, to run repeatedly:
 delay(3000); //allow enough time to click run on matlab
-tone(8,1000,500);
-//Serial.println(micros()); //I found that it actually starts sampling at 3.000016 seconds.
-while (micros()<=4000032){ //sampling for 1 second
+//Serial.println(micros());
+while (micros()<=4000000){ //sampling for 1 second
   Serial.write(analogRead(0)/4); //writing the sampled value to the port, dividing by 4 to make an 8 bit value
 }
 delay(60000);

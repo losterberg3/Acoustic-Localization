@@ -2,9 +2,10 @@
 #include <iostream>
 #include <cmath>
 
+
 int main() {
 
-int shift=300; // how much signals are shifted by
+int shift=500; // how much signals are shifted by
 int N=45000;  // Size of the FFT, and sampling rate in hz
 double cl=0.5; //chirplength in seconds
 int sf=500; //start frequency of the chirp
