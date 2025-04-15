@@ -8,23 +8,25 @@ int main() {
 int shift=500; // how much signals are shifted by
 int N=45000;  // Size of the FFT, and sampling rate in hz
 double cl=0.5; //chirplength in seconds
-int sf=500; //start frequency of the chirp
-int ef=1200; //end frequency of the chirp
+int sf=500; // start frequency of the chirp
+int ef=1200; // end frequency of the chirp
 double t;
 double f;
-double soundSamples[N];
-double referenceSignal[N];
+double soundSamples[N]; // the sampled sound signal
+double referenceSignal[N]; // the reference chirp signal we'll be comparing to, created by the speaker
 
-for (int i=0;i<N;++i){
+for (int i=0;i<N;++i){ // adding points to the reference signal, based on defined parameters above
     if (i<(cl*N)){
-        t=static_cast<double>(i)/(N-1);
+        t=static_cast<double>(i)/(N-1); 
         f=(t*t*(ef-sf)/cl/2)+(t*sf);
         referenceSignal[i]=sin(f*2*M_PI); //defining pi here 
     } else {
         referenceSignal[i]=0;
     }
 }
-for (int i=0;i<N;++i){
+
+// in this case, no data has been sampled and instead we are using a simulated chirp
+for (int i=0;i<N;++i){ // adding to the sampled signal (just the ref signal shifted over)
     if (i<shift){
         soundSamples[i]=0;
     } else if (i>=((cl*N)+shift)) {
@@ -35,6 +37,8 @@ for (int i=0;i<N;++i){
         soundSamples[i]=sin(f*2*M_PI); 
     } 
 }
+// now performing the cross-correlation using fftw
+    
     fftw_complex refout[N];  // Output reference array (complex numbers)
     fftw_complex sampout[N]; // Output sampled array 
     fftw_complex out[N];
@@ -63,15 +67,15 @@ for (int i=0;i<N;++i){
     // Perform IFFT
     fftw_execute(plan_backward);
 
-    for (int i=0; i<N; ++i){
+    for (int i=0; i<N; ++i){ // finding the spike in the cross-correlated signal
         if (spectrum[i]>max){
             max=spectrum[i];
             index=i;
         }
     }
 
-    tof=static_cast<double>(index)/(N-1);
-    distance=tof*343;
+    tof=static_cast<double>(index)/(N-1); // converting the index to a time-delay value
+    distance=tof*343; // converting the time-delay to distance
 
     // Print the results
 
