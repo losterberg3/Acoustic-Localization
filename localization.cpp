@@ -28,9 +28,9 @@ int main() {
     uint32 tmr = 100000;  // Sampling rate: 50 kHz (20000 ns)
     uint32 mask = 1 << 9;  // Active step: step 10 for AIN-1
     uint32 samp = 50000;  // Number of samples
-    double samples[samp];
-
-    if (pruio_config(io, samp, mask, tmr, 0)) {
+    double samples[samp]; // Sampled sound signal
+	
+    if (pruio_config(io, samp, mask, tmr, 0)) { 
         printf("Configuration failed: %s\n", io->Errr);
         return 1;
     }
@@ -49,7 +49,7 @@ int main() {
         usleep(1000);  // Sleep briefly to avoid a tight loop
 	}
 
-	// Process the first half of the buffer (AIN-0)
+	// Process the buffer (AIN-0)
 	for (uint32 i = 0; i < samp; i++) {
         	samples[i]=io->Adc->Value[i];
         	printf("%u\n", samples[i]);
@@ -67,9 +67,9 @@ int main() {
         int ef=1200; //end frequency of the chirp
         double t;
         double f;
-        double referenceSignal[samp];
+        double referenceSignal[samp]; // the reference signal
 
-        for (int i=0;i<samp;++i){
+        for (int i=0;i<samp;++i){ // adding to the reference signal based on the sound produced
             if (i<(cl*samp)){
                 t=static_cast<double>(i)/(samp-1);
                 f=(t*t*(ef-sf)/cl/2)+(t*sf);
@@ -79,6 +79,8 @@ int main() {
             }
         }
 
+	// now performing cross-correlation of the sampled data with the reference
+	
         fftw_complex refout[samp];  // Output reference array (complex numbers)
         fftw_complex sampout[samp]; // Output sampled array 
         fftw_complex out[samp];
@@ -107,15 +109,15 @@ int main() {
         // Perform IFFT
         fftw_execute(plan_backward);
 
-        for (int i=0; i<samp; ++i){
+        for (int i=0; i<samp; ++i){ // finding the peak in the correlated signal
             if (spectrum[i]>max){
                 max=spectrum[i];
                 index=i;
             }
         }
 
-        tof=static_cast<double>(index)/(samp-1);
-        distance=tof*343;
+        tof=static_cast<double>(index)/(samp-1); // using that peak to find a time delay
+        distance=tof*343; // converting time to a distance measurement
 
         // Print the results
 
@@ -140,7 +142,7 @@ int main() {
         // Calculate the remaining time to wait
         auto wait_time = std::chrono::seconds(4) - elapsed;
         
-        // Ensure we wait exactly 4 seconds, adjusting for the code execution time
+        // Ensure we wait exactly 4 seconds between samples, adjusting for the code execution time
         if (wait_time > std::chrono::seconds(0)) {
             std::this_thread::sleep_for(wait_time);
         }
